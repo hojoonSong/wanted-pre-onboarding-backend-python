@@ -18,17 +18,40 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 # 어플리케이션 정의
 INSTALLED_APPS = [
-    # 기본 설치 어플리케이션
+    'django.contrib.admin',
+    'django.contrib.auth',  # 인증 및 권한을 관리하는 앱
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',  # 세션 관리를 위한 앱
+    'django.contrib.messages',  # 메시징 프레임워크
+    'django.contrib.staticfiles',  # 정적 파일을 관리하는 앱
+    'rest_framework',
+    'wanted.jobpostings',
 ]
 
 MIDDLEWARE = [
-    # 미들웨어 설정
+    # ...
+    'django.contrib.sessions.middleware.SessionMiddleware',  # 이 라인을 추가합니다.
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 이 라인이 이미 존재한다면, 위치를 확인해주세요.
+    'django.contrib.messages.middleware.MessageMiddleware',  # 이 라인을 추가합니다.
+    # ...
 ]
 
 ROOT_URLCONF = 'wanted.urls'
 
 TEMPLATES = [
-    # 템플릿 설정
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 WSGI_APPLICATION = 'wanted.wsgi.application'
@@ -49,6 +72,7 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     # 비밀번호 검증 설정
 ]
+
 
 # 국제화
 LANGUAGE_CODE = 'en-us'
