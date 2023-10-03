@@ -16,6 +16,4 @@ class JobPostingCreateSerializer(serializers.ModelSerializer):
         fields = ('company_id', 'position', 'reward', 'content', 'technology')
 
     def create(self, validated_data):
-        company = validated_data.pop('company')
-        validated_data['company_id'] = company.id
         return JobPosting.objects.create(**validated_data)
