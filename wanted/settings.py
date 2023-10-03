@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',  # 메시징 프레임워크
     'django.contrib.staticfiles',  # 정적 파일을 관리하는 앱
     'rest_framework',
+    'drf_yasg',
     'wanted.jobpostings',
 ]
 

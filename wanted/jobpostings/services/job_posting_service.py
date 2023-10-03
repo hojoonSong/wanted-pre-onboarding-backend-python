@@ -7,3 +7,6 @@ class JobPostingService:
 
     def get_job_posting_by_id(self, job_posting_id):
         return self.job_posting_repository.get_job_posting_by_id(job_posting_id)
+
+    def create_job_posting(self, data):
+        return self.job_posting_repository.create_job_posting(data)
