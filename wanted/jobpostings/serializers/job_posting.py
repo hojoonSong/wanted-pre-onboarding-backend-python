@@ -26,4 +26,5 @@ class JobPostingDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobPosting
-        fields = ('id', 'company_name', 'company_country', 'company_region', 'position', 'reward', 'content', 'technology')
+        fields = ('id', 'company_name', 'company_country', 'company_region', 'position', 'reward', 'technology')
+
