@@ -10,7 +10,7 @@ class JobPostingViewSetTest(APITestCase):
         self.company = Company.objects.create(name="TestCo", country="TestLand", region="TestRegion")
         self.url = reverse('job-posting-list')
 
-        # 기본 생성 데이터
+        # Base Information
         self.create_data = {
             "company_id": self.company.id,
             "position": "Backend Developer",
@@ -27,7 +27,6 @@ class JobPostingViewSetTest(APITestCase):
         self.assertEqual(JobPosting.objects.first().position, "Backend Developer")
 
     def test_update_job_posting(self):
-        # 먼저 JobPosting 객체를 생성
         job_posting = JobPosting.objects.create(
             company=self.company,
             position="Frontend Developer",
@@ -36,7 +35,7 @@ class JobPostingViewSetTest(APITestCase):
             technology="React"
         )
 
-        # 업데이트 할 데이터
+        # to Update
         update_data = {
             "position": "Fullstack Developer",
             "technology": "Django + React"
@@ -55,7 +54,7 @@ class JobPostingViewSetTest(APITestCase):
     def test_delete_job_posting(self):
         company = Company.objects.create(name="TestCo", country="TestLand", region="TestRegion")
 
-        # JobPosting 객체를 생성
+        # Create a Job Posting
         job_posting = JobPosting.objects.create(
             company=company,
             position="Frontend Developer",
@@ -66,9 +65,43 @@ class JobPostingViewSetTest(APITestCase):
 
         url = reverse('job-posting-detail', args=[job_posting.id])
 
-        # 채용공고를 삭제합니다.
+        # Delete this Jobposting
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(JobPosting.objects.count(), 0)
+
+    def test_list_job_postings(self):
+        # Add two Job Postings
+        JobPosting.objects.create(**self.create_data)
+        JobPosting.objects.create(
+            company=self.company,
+            position="Frontend Developer",
+            reward=25000,
+            content="We are hiring a frontend developer.",
+            technology="React"
+        )
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_search_job_postings(self):
+        # Add two Job Postings
+        JobPosting.objects.create(**self.create_data)
+        JobPosting.objects.create(
+            company=self.company,
+            position="Frontend Developer",
+            reward=25000,
+            content="We are hiring a frontend developer.",
+            technology="VueJS"
+        )
+
+        # Keyword with "Django"
+        search_url = f"{self.url}?search=Django"
+        response = self.client.get(search_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["technology"], "Django")
 

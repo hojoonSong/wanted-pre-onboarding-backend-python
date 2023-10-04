@@ -33,3 +33,14 @@ class JobPostingRepositoryTest(TestCase):
         self.repository.delete(job_posting)
         self.assertEqual(JobPosting.objects.count(), 0)
 
+    def test_list_and_search(self):
+        JobPosting.objects.create(**self.job_posting_data)
+
+        # Search without a Keyword
+        results = self.repository.list_and_search()
+        self.assertEqual(len(results), 1)
+
+        # Search with a Keyword
+        results = self.repository.list_and_search(search="TestCo")
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].company.name, "TestCo")

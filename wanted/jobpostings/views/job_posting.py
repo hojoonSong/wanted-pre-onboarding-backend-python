@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
 from ..models import JobPosting
-from ..serializers.job_posting import JobPostingSerializer, JobPostingCreateSerializer
+from ..serializers.job_posting import JobPostingSerializer, JobPostingCreateSerializer, JobPostingDetailSerializer
 from ..services.job_posting_service import JobPostingService
 from ..dao.job_posting_repository import JobPostingRepository
 
@@ -31,3 +31,9 @@ class JobPostingViewSet(mixins.CreateModelMixin,
         instance = self.get_object()
         self.job_posting_service.delete_job_posting(instance.id)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def list(self, request, *args, **kwargs):
+        search = request.query_params.get('search', '')
+        queryset = self.job_posting_service.list_and_search(search)
+        serializer = JobPostingDetailSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

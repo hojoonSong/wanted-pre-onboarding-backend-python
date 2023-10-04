@@ -20,5 +20,8 @@ class JobPostingService:
         job_posting = self.job_posting_repository.get(job_posting_id)
         self.job_posting_repository.delete(job_posting)
 
+    def list_and_search(self, search=''):
+        return self.job_posting_repository.list_and_search(search)
+
 
 
