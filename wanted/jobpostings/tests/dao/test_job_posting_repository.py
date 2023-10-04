@@ -27,3 +27,9 @@ class JobPostingRepositoryTest(TestCase):
         job_posting = JobPosting.objects.create(**self.job_posting_data)
         fetched_job_posting = self.repository.get(job_posting.id)
         self.assertEqual(fetched_job_posting.position, "Backend Developer")
+
+    def test_delete_job_posting(self):
+        job_posting = JobPosting.objects.create(**self.job_posting_data)
+        self.repository.delete(job_posting)
+        self.assertEqual(JobPosting.objects.count(), 0)
+

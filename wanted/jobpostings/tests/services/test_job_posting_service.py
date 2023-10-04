@@ -41,3 +41,19 @@ class JobPostingServiceTest(TestCase):
         self.job_posting_repository.get.assert_called_once_with(job_posting_id)
         mock_job_posting.save.assert_called_once()
         self.assertEqual(mock_job_posting.position, validated_data["position"])
+
+    def test_delete_job_posting(self):
+        # JobPosting 객체를 Mocking
+        mock_job_posting = mock.Mock(spec=JobPosting)
+        self.job_posting_repository.get.return_value = mock_job_posting
+
+        job_posting_id = 1
+
+        # Method 호출
+        self.job_posting_service.delete_job_posting(job_posting_id)
+
+        # 호출 검증
+        self.job_posting_repository.get.assert_called_once_with(job_posting_id)
+        self.job_posting_repository.delete.assert_called_once_with(mock_job_posting)
+
+

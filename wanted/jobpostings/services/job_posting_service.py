@@ -16,3 +16,9 @@ class JobPostingService:
 
         return job_posting
 
+    def delete_job_posting(self, job_posting_id):
+        job_posting = self.job_posting_repository.get(job_posting_id)
+        self.job_posting_repository.delete(job_posting)
+
+
+

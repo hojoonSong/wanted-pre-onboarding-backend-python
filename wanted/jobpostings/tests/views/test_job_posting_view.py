@@ -51,3 +51,24 @@ class JobPostingViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(job_posting.position, "Fullstack Developer")
         self.assertEqual(job_posting.technology, "Django + React")
+
+    def test_delete_job_posting(self):
+        company = Company.objects.create(name="TestCo", country="TestLand", region="TestRegion")
+
+        # JobPosting 객체를 생성
+        job_posting = JobPosting.objects.create(
+            company=company,
+            position="Frontend Developer",
+            reward=18000,
+            content="We are hiring a frontend developer.",
+            technology="React"
+        )
+
+        url = reverse('job-posting-detail', args=[job_posting.id])
+
+        # 채용공고를 삭제합니다.
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(JobPosting.objects.count(), 0)
+

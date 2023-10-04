@@ -8,3 +8,6 @@ class JobPostingRepository:
 
     def create_job_posting(self, data):
         return JobPosting.objects.create(**data)
+
+    def delete(self, job_posting):
+        job_posting.delete()
