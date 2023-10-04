@@ -28,3 +28,16 @@ class JobPostingDetailSerializer(serializers.ModelSerializer):
         model = JobPosting
         fields = ('id', 'company_name', 'company_country', 'company_region', 'position', 'reward', 'technology')
 
+
+class JobPostingDetailWithContentSerializer(JobPostingDetailSerializer):
+    other_postings = serializers.SerializerMethodField()
+
+    class Meta(JobPostingDetailSerializer.Meta):
+        fields = JobPostingDetailSerializer.Meta.fields + ('content', 'other_postings')
+
+    def get_other_postings(self, obj):
+        other_postings_by_company = JobPosting.objects.filter(company=obj.company).exclude(id=obj.id)
+        return [posting.id for posting in other_postings_by_company]
+
+
+

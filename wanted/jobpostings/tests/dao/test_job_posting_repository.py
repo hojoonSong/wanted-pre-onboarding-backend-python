@@ -44,3 +44,18 @@ class JobPostingRepositoryTest(TestCase):
         results = self.repository.list_and_search(search="TestCo")
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].company.name, "TestCo")
+
+    def test_get_detail(self):
+        job_posting = JobPosting.objects.create(company=self.company, position="Backend Developer", reward=20000)
+        fetched_job_posting = self.repository.get_detail(job_posting.id)
+        self.assertEqual(fetched_job_posting.position, "Backend Developer")
+
+    def test_get_other_postings_by_company(self):
+        job_posting1 = JobPosting.objects.create(company=self.company, position="Backend Developer", reward=20000)
+        job_posting2 = JobPosting.objects.create(company=self.company, position="Frontend Developer", reward=20000)
+        other_postings = self.repository.get_other_postings_by_company(self.company.id, job_posting1.id)
+        self.assertEqual(len(other_postings), 1)
+        self.assertEqual(other_postings.first().position, "Frontend Developer")
+
+
+

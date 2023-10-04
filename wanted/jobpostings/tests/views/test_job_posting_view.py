@@ -105,3 +105,18 @@ class JobPostingViewSetTest(APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["technology"], "Django")
 
+    def test_get_job_posting_detail(self):
+        job_posting = JobPosting.objects.create(
+            company=self.company,
+            position="Frontend Developer",
+            reward=25000,
+            content="We are hiring a frontend developer.",
+            technology="VueJS"
+        )
+        detail_url = reverse('job-posting-job-posting-detail', args=[job_posting.id])
+        response = self.client.get(detail_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['position'], "Frontend Developer")
+
+
+

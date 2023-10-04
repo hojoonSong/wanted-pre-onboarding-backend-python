@@ -23,5 +23,15 @@ class JobPostingService:
     def list_and_search(self, search=''):
         return self.job_posting_repository.list_and_search(search)
 
+    def get_job_posting_detail(self, job_posting_id):
+        job_posting = self.job_posting_repository.get_detail(job_posting_id)
+        other_postings = self.job_posting_repository.get_other_postings_by_company(job_posting.company.id, job_posting.id)
+        return job_posting, other_postings
+
+
+
+
+
+
 
 

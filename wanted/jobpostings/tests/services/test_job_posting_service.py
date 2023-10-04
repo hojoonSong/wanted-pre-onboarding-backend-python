@@ -56,4 +56,19 @@ class JobPostingServiceTest(TestCase):
         self.job_posting_repository.get.assert_called_once_with(job_posting_id)
         self.job_posting_repository.delete.assert_called_once_with(mock_job_posting)
 
+    def test_get_job_posting_detail(self):
+        # JobPosting 객체와 다른 채용 정보 목록을 Mocking
+        mock_job_posting = mock.Mock(spec=JobPosting, position="Backend Developer")
+        mock_other_postings = []
+
+        # repository method의 반환값을 설정
+        self.job_posting_repository.get_detail.return_value = mock_job_posting
+        self.job_posting_repository.get_other_postings_by_company.return_value = mock_other_postings
+
+        job_posting_id = 1
+        fetched_job_posting, other_postings = self.job_posting_service.get_job_posting_detail(job_posting_id)
+
+        # 검증
+        self.assertEqual(fetched_job_posting.position, "Backend Developer")
+        self.assertEqual(len(other_postings), 0)
 
