@@ -9,13 +9,21 @@ class JobPostingSerializer(serializers.ModelSerializer):
 
 
 class JobPostingCreateSerializer(serializers.ModelSerializer):
-    company_id = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), source='company')
+    company_id = serializers.IntegerField()
 
     class Meta:
         model = JobPosting
         fields = ('company_id', 'position', 'reward', 'content', 'technology')
 
+    def validate_company_id(self, value):
+        if not Company.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Company with this ID does not exist.")
+        return value
+
     def create(self, validated_data):
+        company_id = validated_data.pop('company_id')
+        company = Company.objects.get(id=company_id)
+        validated_data['company'] = company
         return JobPosting.objects.create(**validated_data)
 
 

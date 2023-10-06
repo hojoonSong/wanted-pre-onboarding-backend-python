@@ -1,9 +1,13 @@
-from ..models.applicant import Applicant
+from ..models import JobPosting, Applicant
 
 
 class ApplicantRepository:
-    def get_all_applicants(self):
-        return Applicant.objects.all()
+    @staticmethod
+    def create_application(data):
+        job_posting = JobPosting.objects.get(id=data["job_posting_id"])
+        return Applicant.objects.create(user_id=data["user_id"], job_posting=job_posting)
 
-    def get_applicant_by_id(self, user_id):
-        return Applicant.objects.get(user_id=user_id)
+    @staticmethod
+    def check_if_already_applied(user_id, job_posting_id):
+        return Applicant.objects.filter(user_id=user_id, job_posting_id=job_posting_id).exists()
+
